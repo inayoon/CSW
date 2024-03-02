@@ -2,7 +2,8 @@
   "compilerOptions": {
       "target": "es5",
       "types": ["node"],
-      "module": "commonjs",
+      
+      "esModuleInterop": true,
       "noImplicitAny": true,
       "strictNullChecks": true
   }
