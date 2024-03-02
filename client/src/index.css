@@ -5,3 +5,8 @@
 *{
   font-family: 'Montserrat';
 }
+@layer utilities {
+.highlight {
+  background: linear-gradient(to top, rgb(253, 253, 203) 45%, transparent 40%);
+}
+}
