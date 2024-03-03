@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import "./App.css";
 import Home from "./pages/Home";
 import Signin from "./pages/Signin";
@@ -12,14 +12,22 @@ import Bear from "./pages/Bear";
 function App() {
   return (
     <BrowserRouter>
-      <Header />
       <Routes>
-        <Route path="/" element={<Home />}></Route>
-        <Route path="/sign-in" element={<Signin />}></Route>
         <Route path="/sign-up" element={<SignUp />}></Route>
-        <Route path="/rabbit" element={<Rabbit />}></Route>
-        <Route path="/bear" element={<Bear />}></Route>
-        <Route path="/diy-kit" element={<DiyKit />}></Route>
+        <Route
+          element={
+            <>
+              <Header />
+              <Outlet />
+            </>
+          }
+        >
+          <Route path="/" element={<Home />}></Route>
+          <Route path="/sign-in" element={<Signin />}></Route>
+          <Route path="/rabbit" element={<Rabbit />}></Route>
+          <Route path="/bear" element={<Bear />}></Route>
+          <Route path="/diy-kit" element={<DiyKit />}></Route>
+        </Route>
       </Routes>
     </BrowserRouter>
   );
