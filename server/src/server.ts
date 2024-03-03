@@ -3,6 +3,8 @@ import express, { Request, Response } from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv'
 dotenv.config();
+import userRoutes from './routes/user.routes'
+import authRoutes from './routes/auth.routes'
 
 mongoose.connect(process.env.MONGO_KEY as string )
   .then(()=>{
@@ -13,10 +15,10 @@ mongoose.connect(process.env.MONGO_KEY as string )
 )
 
 const app = express();
+app.use(express.json());
 app.listen(3000, ()=>{
   console.log('Server is running on port 3000!!')
 })
 
-app.get('/test', (req: Request, res: Response)=>{
-  res.json({message:'API is working now'})
-})
+app.use('/api',userRoutes)
+app.use('/api/auth',authRoutes)
