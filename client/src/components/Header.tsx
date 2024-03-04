@@ -40,7 +40,7 @@ export default function Header() {
           </div>
           {/* Login link container */}
           <div className="flex gap-2">
-            <Link to="/sign-up">
+            <Link to="/sign-in">
               <Button gradientDuoTone="pinkToOrange" className="rounded-full">
                 Log In
               </Button>
