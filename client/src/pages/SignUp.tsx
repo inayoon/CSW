@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import banner from "../../public/csw_white.png";
-import { Button, Label, TextInput } from "flowbite-react";
+import { Alert, Button, Label, TextInput } from "flowbite-react";
+import axios from "axios";
 
 interface FormValue {
   username: string;
@@ -11,6 +12,8 @@ interface FormValue {
 }
 
 export default function SignUp() {
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | undefined>();
   const {
     register,
     handleSubmit,
@@ -19,13 +22,25 @@ export default function SignUp() {
     reset,
   } = useForm<FormValue>({ mode: "onChange" });
 
-  const onSubmit = ({ username, email, password }: FormValue) => {
+  const onSubmit = async ({ username, email, password }: FormValue) => {
     const body = {
       username,
       email,
       password,
     };
-    reset();
+    try {
+      const res = await axios.post("/api/auth/signup", body);
+      const data = await res.data;
+      reset();
+      return data;
+    } catch (error: any) {
+      if (error.response) {
+        const { status, data } = error.response;
+        if (status === 400 && data === "User already exists") {
+          setErrorMessage("User already exists.");
+        }
+      }
+    }
   };
 
   const userName = {
@@ -123,6 +138,11 @@ export default function SignUp() {
                 Log In💘
               </Link>
             </p>
+            {errorMessage && (
+              <Alert className=" bg-ivory text-red-500 font-bold items-center">
+                {errorMessage}
+              </Alert>
+            )}
           </form>
         </div>
       </div>
