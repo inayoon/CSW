@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import banner from "../../public/csw_white.png";
-import { Alert, Button, Label, TextInput } from "flowbite-react";
+import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
 import axios from "axios";
 
 interface FormValue {
@@ -14,6 +14,7 @@ interface FormValue {
 export default function SignUp() {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -29,9 +30,16 @@ export default function SignUp() {
       password,
     };
     try {
+      setLoading(true);
+      setErrorMessage("");
       const res = await axios.post("/api/auth/signup", body);
       const data = await res.data;
+      console.log(data);
+      setLoading(false);
       reset();
+      if (res.status === 200) {
+        navigate("/sign-in");
+      }
       return data;
     } catch (error: any) {
       if (error.response) {
@@ -40,6 +48,7 @@ export default function SignUp() {
           setErrorMessage("User already exists.");
         }
       }
+      setLoading(false);
     }
   };
 
@@ -81,6 +90,9 @@ export default function SignUp() {
             onSubmit={handleSubmit(onSubmit)}
             className="w-1/2 flex flex-col gap-3 mx-auto"
           >
+            <div className="font-extrabold text-lg highlight w-20 text-choco">
+              Sign Up
+            </div>
             <div>
               <Label htmlFor="username" value="Username" />
               <TextInput
@@ -129,8 +141,19 @@ export default function SignUp() {
                 </div>
               )}
             </div>
-            <Button gradientDuoTone="redToYellow" type="submit">
-              Sign Up
+            <Button
+              gradientDuoTone="redToYellow"
+              type="submit"
+              disabled={loading}
+            >
+              {loading ? (
+                <>
+                  <Spinner size="sm" />
+                  <span className="pl-2">Loading...</span>
+                </>
+              ) : (
+                "Sign Up"
+              )}
             </Button>
             <p className="text-sm">
               Have an account?

@@ -17,6 +17,9 @@ export default function SignIn() {
         {/* right side */}
         <div className="w-full py-6 bg-bgPink md:w-1/2 h-screen md:grid md:place-items-center">
           <form className="w-1/2 flex flex-col gap-3 mx-auto">
+            <div className="font-extrabold text-lg highlight w-16 text-choco">
+              Log In
+            </div>
             <div>
               <Label value="Username" />
               <TextInput

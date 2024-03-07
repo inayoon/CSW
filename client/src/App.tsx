@@ -9,6 +9,7 @@ import DiyKit from "./pages/DiyKit";
 import Rabbit from "./pages/Rabbit";
 import Bear from "./pages/Bear";
 import SignIn from "./pages/Signin";
+import FooterCom from "./components/Footer";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
             <>
               <Header />
               <Outlet />
+              <FooterCom />
             </>
           }
         >
