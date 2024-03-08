@@ -90,7 +90,7 @@ export default function SignUp() {
             onSubmit={handleSubmit(onSubmit)}
             className="w-1/2 flex flex-col gap-3 mx-auto"
           >
-            <div className="font-extrabold text-lg highlight w-20 text-choco">
+            <div className="font-[900] text-xl  text-choco md:text-2xl">
               Sign Up
             </div>
             <div>
@@ -103,7 +103,7 @@ export default function SignUp() {
               />
               {errors?.username && (
                 <div>
-                  <span className="font-semibold text-sm tracking-tight text-red-600">
+                  <span className="font-semibold text-sm tracking-tight text-choco">
                     📛{errors.username.message}
                   </span>
                 </div>
@@ -119,7 +119,7 @@ export default function SignUp() {
               />
               {errors?.email && (
                 <div>
-                  <span className="font-semibold text-sm tracking-tight text-red-600">
+                  <span className="font-semibold text-sm tracking-tight text-choco">
                     📛{errors.email.message}
                   </span>
                 </div>
@@ -135,7 +135,7 @@ export default function SignUp() {
               />
               {errors?.password && (
                 <div>
-                  <span className="font-semibold text-sm tracking-tighter text-red-600 md:whitespace-nowrap">
+                  <span className="font-semibold text-sm tracking-tighter text-choco md:whitespace-nowrap">
                     📛{errors.password.message}
                   </span>
                 </div>
@@ -162,7 +162,7 @@ export default function SignUp() {
               </Link>
             </p>
             {errorMessage && (
-              <Alert className=" bg-ivory text-red-500 font-bold items-center">
+              <Alert className=" bg-choco text-bgPink font-bold items-center p-2 ">
                 {errorMessage}
               </Alert>
             )}

@@ -6,7 +6,6 @@ import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
 import axios from "axios";
 
 interface FormValue {
-  username: string;
   email: string;
   password: string;
 }
@@ -22,19 +21,31 @@ export default function SignIn() {
     formState: { errors },
     reset,
   } = useForm<FormValue>({ mode: "onChange" });
-  const onSubmit = async ({ username, email, password }: FormValue) => {
+  const onSubmit = async ({ email, password }: FormValue) => {
     const body = {
-      username,
       email,
       password,
     };
     try {
       setLoading(true);
       setErrorMessage("");
-
+      const res = await axios.post("/api/auth/signin", body);
+      const data = await res.data;
+      console.log(data);
+      setLoading(false);
       reset();
+      if (res.status === 200) {
+        navigate("/");
+      }
+      return data;
     } catch (error: any) {
-      console.log(error);
+      if (error.response) {
+        const { status, data } = error.response;
+        if (status === 400 || status === 404) {
+          setErrorMessage(data);
+        }
+      }
+      setLoading(false);
     }
   };
 
@@ -69,7 +80,7 @@ export default function SignIn() {
             onSubmit={handleSubmit(onSubmit)}
             className="w-1/2 flex flex-col gap-3 mx-auto"
           >
-            <div className="font-extrabold text-lg highlight w-16 text-choco">
+            <div className="font-[900] text-xl  text-choco md:text-2xl">
               Log In
             </div>
 
@@ -83,7 +94,7 @@ export default function SignIn() {
               />
               {errors?.email && (
                 <div>
-                  <span className="font-semibold text-sm tracking-tight text-red-600">
+                  <span className="font-semibold text-sm tracking-tight text-choco">
                     📛{errors.email.message}
                   </span>
                 </div>
@@ -99,7 +110,7 @@ export default function SignIn() {
               />
               {errors?.password && (
                 <div>
-                  <span className="font-semibold text-sm tracking-tighter text-red-600 md:whitespace-nowrap">
+                  <span className="font-semibold text-sm tracking-tighter text-choco md:whitespace-nowrap">
                     📛{errors.password.message}
                   </span>
                 </div>
@@ -126,7 +137,7 @@ export default function SignIn() {
               </Link>
             </p>
             {errorMessage && (
-              <Alert className=" bg-ivory text-red-500 font-bold items-center">
+              <Alert className=" bg-choco text-bgPink font-bold items-center p-2  ">
                 {errorMessage}
               </Alert>
             )}
