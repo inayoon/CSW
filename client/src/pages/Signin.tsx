@@ -4,6 +4,9 @@ import { Link, useNavigate } from "react-router-dom";
 import banner from "../../public/csw_white.png";
 import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
 import axios from "axios";
+import { signInStart, signInSuccess, signInFailure } from "../redux/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { IRootState } from "../redux/store";
 
 interface FormValue {
   email: string;
@@ -11,8 +14,13 @@ interface FormValue {
 }
 
 export default function SignIn() {
-  const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | undefined>();
+  const {
+    loading,
+    error: errorMessage,
+  }: { loading: boolean; error: null | string } = useSelector(
+    (state: IRootState) => state.user
+  );
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const {
     register,
@@ -27,25 +35,17 @@ export default function SignIn() {
       password,
     };
     try {
-      setLoading(true);
-      setErrorMessage("");
-      const res = await axios.post("/api/auth/signin", body);
-      const data = await res.data;
-      console.log(data);
-      setLoading(false);
-      reset();
-      if (res.status === 200) {
-        navigate("/");
+      dispatch(signInStart());
+      const response = await axios.post("/api/auth/signin", body);
+      const data = response.data;
+      if (data.success === false) {
+        return dispatch(signInFailure(data));
       }
-      return data;
+      dispatch(signInSuccess(data));
+      navigate("/");
     } catch (error: any) {
-      if (error.response) {
-        const { status, data } = error.response;
-        if (status === 400 || status === 404) {
-          setErrorMessage(data);
-        }
-      }
-      setLoading(false);
+      dispatch(signInFailure(error.message));
+      reset();
     }
   };
 
