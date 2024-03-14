@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import banner from "../../public/csw_white.png";
@@ -8,7 +7,7 @@ import { signInStart, signInSuccess, signInFailure } from "../redux/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { IRootState } from "../redux/store";
 
-interface FormValue {
+export interface LoginValue {
   email: string;
   password: string;
 }
@@ -20,17 +19,17 @@ export default function SignIn() {
   }: { loading: boolean; error: null | string } = useSelector(
     (state: IRootState) => state.user
   );
-  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const dispatch = useDispatch<any>();
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
     reset,
-  } = useForm<FormValue>({ mode: "onChange" });
-  const onSubmit = async ({ email, password }: FormValue) => {
-    const body = {
+  } = useForm<LoginValue>({ mode: "onChange" });
+  const onSubmit = async ({ email, password }: LoginValue) => {
+    const body: LoginValue = {
       email,
       password,
     };
@@ -46,6 +45,7 @@ export default function SignIn() {
     } catch (error: any) {
       dispatch(signInFailure(error.message));
       reset();
+      //reset 사용
     }
   };
 
