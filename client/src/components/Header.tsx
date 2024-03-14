@@ -4,7 +4,7 @@ import { RxHamburgerMenu } from "react-icons/rx";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 
-export default function Header() {
+export default function Header({ isAuth }) {
   const [showDropdown, setShowDropdown] = useState(false);
   const toggleNav = () => {
     setShowDropdown((prev) => !prev);
@@ -39,12 +39,21 @@ export default function Header() {
             </Link>
           </div>
           {/* Login link container */}
+
           <div className="flex gap-2">
-            <Link to="/sign-in">
-              <Button gradientDuoTone="pinkToOrange" className="rounded-full">
-                Log In
-              </Button>
-            </Link>
+            {isAuth ? (
+              <Link to="/rabbit">
+                <Button gradientDuoTone="pinkToOrange" className="rounded-full">
+                  Log Out
+                </Button>
+              </Link>
+            ) : (
+              <Link to="/sign-in">
+                <Button gradientDuoTone="pinkToOrange" className="rounded-full">
+                  Log In
+                </Button>
+              </Link>
+            )}
 
             {/* Hamburger menu */}
             <div className="flex self-center md:hidden">

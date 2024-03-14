@@ -29,7 +29,7 @@ function App() {
         <Route
           element={
             <>
-              <Header />
+              <Header isAuth={isAuth} />
               <Outlet />
               <FooterCom />
             </>

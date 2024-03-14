@@ -43,7 +43,7 @@ export default function SignIn() {
       dispatch(signInSuccess(data));
       navigate("/");
     } catch (error: any) {
-      dispatch(signInFailure(error.message));
+      dispatch(signInFailure(error.response.data));
       reset();
       //reset 사용
     }
