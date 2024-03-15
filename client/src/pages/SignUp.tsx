@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import banner from "../../public/csw_white.png";
 import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
 import axios from "axios";
+import OAuth from "../components/OAuth";
 
 interface FormValue {
   username: string;
@@ -155,6 +156,7 @@ export default function SignUp() {
                 "Sign Up"
               )}
             </Button>
+            <OAuth />
             <p className="text-sm">
               Have an account?
               <Link to="/sign-in" className="text-ivory ml-2">

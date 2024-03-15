@@ -6,6 +6,7 @@ import axios from "axios";
 import { signInStart, signInSuccess, signInFailure } from "../redux/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { IRootState } from "../redux/store";
+import OAuth from "../components/OAuth";
 
 export interface LoginValue {
   email: string;
@@ -39,9 +40,10 @@ export default function SignIn() {
       const data = response.data;
       if (data.success === false) {
         return dispatch(signInFailure(data));
+      } else {
+        dispatch(signInSuccess(data));
+        navigate("/");
       }
-      dispatch(signInSuccess(data));
-      navigate("/");
     } catch (error: any) {
       dispatch(signInFailure(error.response.data));
       reset();
@@ -130,6 +132,7 @@ export default function SignIn() {
                 "Log In"
               )}
             </Button>
+            <OAuth />
             <p className="text-sm">
               Don&apos;t have an account?
               <Link to="/sign-up" className="text-ivory ml-2">
