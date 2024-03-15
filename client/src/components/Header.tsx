@@ -1,13 +1,33 @@
 import { Button } from "flowbite-react";
 import logo from "../../public/logo.png";
 import { RxHamburgerMenu } from "react-icons/rx";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { FaHeartCirclePlus } from "react-icons/fa6";
+import { RiAdminFill } from "react-icons/ri";
+import axios from "axios";
+import { singOutSuccess } from "../redux/userSlice";
+import { useDispatch } from "react-redux";
 
 export default function Header({ isAuth }) {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [showDropdown, setShowDropdown] = useState(false);
   const toggleNav = () => {
     setShowDropdown((prev) => !prev);
+  };
+  const handleLogOut = async () => {
+    try {
+      const response = await axios.post("/api/user/signout");
+      const data = response.data;
+      if (response.status !== 200) {
+        console.log(data.response.data);
+      }
+      dispatch(singOutSuccess());
+      navigate("/sign-in");
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <>
@@ -28,25 +48,37 @@ export default function Header({ isAuth }) {
         <div className="flex self-center gap-10 px-4 ">
           {/* navigators */}
           <div className="gap-4 self-center text-sm md:text-lg hidden md:flex ">
-            <Link to="/rabbit" className="hover:text-ivory">
+            <Link to="/product/rabbit" className="hover:text-ivory">
               Rabbit
             </Link>
-            <Link to="/bear" className="hover:text-ivory">
+            <Link to="/product/bear" className="hover:text-ivory">
               Bear
             </Link>
-            <Link to="/diy-kit" className="hover:text-ivory">
+            <Link to="/product/diy-kit" className="hover:text-ivory">
               Kit
             </Link>
+            <Link to="/product/new" className="hover:text-ivory">
+              <RiAdminFill />
+            </Link>
+            {isAuth ? (
+              <Link to="/favorite">
+                <FaHeartCirclePlus className="w-6 h-6 hover:text-ivory" />
+              </Link>
+            ) : (
+              ""
+            )}
           </div>
           {/* Login link container */}
 
           <div className="flex gap-2">
             {isAuth ? (
-              <Link to="/rabbit">
-                <Button gradientDuoTone="pinkToOrange" className="rounded-full">
-                  Log Out
-                </Button>
-              </Link>
+              <Button
+                gradientDuoTone="pinkToOrange"
+                onClick={handleLogOut}
+                className="rounded-full"
+              >
+                Log Out
+              </Button>
             ) : (
               <Link to="/sign-in">
                 <Button gradientDuoTone="pinkToOrange" className="rounded-full">

@@ -12,6 +12,8 @@ import Cart from "./pages/Cart";
 import { useDispatch, useSelector } from "react-redux";
 import { IRootState } from "./redux/store";
 import NotAuthRoutes from "./components/NotAuthRoutes";
+import Favorite from "./pages/Favorite";
+import NewProduct from "./pages/NewProduct";
 
 function App() {
   const dispatch = useDispatch();
@@ -36,10 +38,12 @@ function App() {
           }
         >
           <Route path="/" element={<Home />}></Route>
-          <Route path="/rabbit" element={<Rabbit />}></Route>
-          <Route path="/bear" element={<Bear />}></Route>
-          <Route path="/diy-kit" element={<DiyKit />}></Route>
+          <Route path="/product/rabbit" element={<Rabbit />}></Route>
+          <Route path="/product/bear" element={<Bear />}></Route>
+          <Route path="/product/diy-kit" element={<DiyKit />}></Route>
+          <Route path="/product/new" element={<NewProduct />}></Route>
           <Route path="/cart" element={<Cart />}></Route>
+          <Route path="/favorite" element={<Favorite />}></Route>
         </Route>
       </Routes>
     </BrowserRouter>
