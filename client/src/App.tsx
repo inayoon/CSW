@@ -9,16 +9,19 @@ import DiyKit from "./pages/DiyKit";
 import Rabbit from "./pages/Rabbit";
 import Bear from "./pages/Bear";
 import Cart from "./pages/Cart";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { IRootState } from "./redux/store";
 import NotAuthRoutes from "./components/NotAuthRoutes";
 import Favorite from "./pages/Favorite";
 import NewProduct from "./pages/NewProduct";
+import { ProtectedAdmin, ProtectedRoutes } from "./components/ProtectedRoutes";
 
 function App() {
-  const dispatch = useDispatch();
   const isAuth = useSelector<IRootState, boolean>(
     (state) => state.user?.isAuth
+  );
+  const isAdmin = useSelector<IRootState, boolean>(
+    (state) => state.user.currentUser?.isAdmin
   );
   return (
     <BrowserRouter>
@@ -31,7 +34,7 @@ function App() {
         <Route
           element={
             <>
-              <Header isAuth={isAuth} />
+              <Header isAuth={isAuth} isAdmin={isAdmin} />
               <Outlet />
               <FooterCom />
             </>
@@ -41,9 +44,14 @@ function App() {
           <Route path="/product/rabbit" element={<Rabbit />}></Route>
           <Route path="/product/bear" element={<Bear />}></Route>
           <Route path="/product/diy-kit" element={<DiyKit />}></Route>
-          <Route path="/product/new" element={<NewProduct />}></Route>
-          <Route path="/cart" element={<Cart />}></Route>
-          <Route path="/favorite" element={<Favorite />}></Route>
+          <Route element={<ProtectedAdmin isAdmin={isAdmin} />}>
+            <Route path="/product/new" element={<NewProduct />}></Route>
+          </Route>
+
+          <Route element={<ProtectedRoutes isAuth={isAuth} />}>
+            <Route path="/cart" element={<Cart />}></Route>
+            <Route path="/favorite" element={<Favorite />}></Route>
+          </Route>
         </Route>
       </Routes>
     </BrowserRouter>

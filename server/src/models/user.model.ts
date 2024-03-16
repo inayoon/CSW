@@ -20,6 +20,10 @@ const userSchema = new mongoose.Schema({
     type:String,
     minLength:6,
   },
+  isAdmin:{
+    type:Boolean,
+    default:false,
+  },
   cart:{
     type:Array,
     default:[],

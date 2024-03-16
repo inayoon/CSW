@@ -7,9 +7,16 @@ import { FaHeartCirclePlus } from "react-icons/fa6";
 import { RiAdminFill } from "react-icons/ri";
 import axios from "axios";
 import { singOutSuccess } from "../redux/userSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { IRootState } from "../redux/store";
 
-export default function Header({ isAuth }) {
+export default function Header({
+  isAuth,
+  isAdmin,
+}: {
+  isAuth: boolean;
+  isAdmin: boolean | null;
+}) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [showDropdown, setShowDropdown] = useState(false);
@@ -57,12 +64,16 @@ export default function Header({ isAuth }) {
             <Link to="/product/diy-kit" className="hover:text-ivory">
               Kit
             </Link>
-            <Link to="/product/new" className="hover:text-ivory">
-              <RiAdminFill />
-            </Link>
+            {isAdmin ? (
+              <Link to="/product/new" className="hover:text-ivory">
+                <RiAdminFill />
+              </Link>
+            ) : (
+              ""
+            )}
             {isAuth ? (
               <Link to="/favorite">
-                <FaHeartCirclePlus className="w-6 h-6 hover:text-ivory" />
+                <FaHeartCirclePlus className="w-6 h-6 text-choco hover:text-ivory" />
               </Link>
             ) : (
               ""
@@ -101,14 +112,18 @@ export default function Header({ isAuth }) {
         {showDropdown && (
           <div className="flex flex-col bg-bgPink text-center py-2 md:hidden">
             <span className="hover:highlight w-16 mx-auto">
-              {" "}
-              <Link to="/rabbit"> Rabbit</Link>
+              <Link to="/product/rabbit"> Rabbit</Link>
             </span>
             <span className="hover:highlight w-12 mx-auto">
-              <Link to="/bear">Bear</Link>
+              <Link to="/product/bear">Bear</Link>
             </span>
             <span className="hover:highlight w-8 mx-auto">
-              <Link to="/diy-kit">Kit</Link>
+              <Link to="/product/diy-kit">Kit</Link>
+            </span>
+            <span className="hover:highlight w-8 mx-auto">
+              <Link to="/favorite">
+                <FaHeartCirclePlus className="w-6 h-6 mx-auto text-choco" />
+              </Link>
             </span>
           </div>
         )}
