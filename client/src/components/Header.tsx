@@ -65,8 +65,8 @@ export default function Header({
               Kit
             </Link>
             {isAdmin ? (
-              <Link to="/product/new" className="hover:text-ivory">
-                <RiAdminFill />
+              <Link to="/product/new">
+                <RiAdminFill className="w-6 h-6 hover:text-ivory text-choco" />
               </Link>
             ) : (
               ""
