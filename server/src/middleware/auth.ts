@@ -14,6 +14,7 @@ export const  auth = async (req:IGetUserAuthInfoRequest, res: express.Response, 
       return res.status(401).send("Unauthorized access");
     }
     req.user = user;
+    next();
   })
 }
 

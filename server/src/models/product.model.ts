@@ -21,6 +21,13 @@ const productSchema = new mongoose.Schema({
     type: Array,
     default: [],
   },
+  options:{
+    type:Array,
+    default:[],
+  },
+  stock:{
+    type:Number,
+  },
   sold: {
     type: Number,
     default: 0,

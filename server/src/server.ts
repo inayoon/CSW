@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser';
 dotenv.config();
 import userRoutes from './routes/user.routes'
 import authRoutes from './routes/auth.routes'
+import productsRoutes from './routes/products.routes'
 
 mongoose.connect(process.env.MONGO_KEY as string )
   .then(()=>{
@@ -24,6 +25,7 @@ app.listen(3000, ()=>{
 
 app.use('/api/user',userRoutes)
 app.use('/api/auth',authRoutes)
+app.use('/api/products',productsRoutes)
 
 app.use((err: any, req:Request, res:Response, next:NextFunction)=>{
   const statusCode = err.statusCode || 500;
