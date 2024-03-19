@@ -1,10 +1,11 @@
-import { Button } from "flowbite-react";
+import { Alert, Button, Spinner } from "flowbite-react";
 import React, { useState } from "react";
 import axios from "axios";
 import { uploadImage } from "../cloudinary/uploader";
 import { useSelector } from "react-redux";
 import { IRootState } from "../redux/store";
 import FileUpload from "../components/FileUpload";
+import { useNavigate } from "react-router-dom";
 
 type Product = {
   title: string;
@@ -16,6 +17,9 @@ type Product = {
 };
 
 export default function NewProduct() {
+  const [loading, setLoading] = useState(false);
+  const [showMessage, setShowMessage] = useState(false);
+  const navigate = useNavigate();
   const detailedOptions = [
     "Black Satin Ribbons(2pcs) +$1",
     "Pink Satin Ribbons(2pcs) +$1",
@@ -70,13 +74,20 @@ export default function NewProduct() {
       ...product,
     };
     try {
+      setLoading(true);
       const response = await axios.post("/api/products/upload", body);
-      console.log(response.data);
+      // 성공적으로 POST 통신이 완료된 후에 제품 상세 정보 초기화
+      if (response.status === 201) {
+        setLoading(false);
+        setShowMessage(true);
+        setTimeout(() => {
+          navigate("/");
+        }, 3000);
+      }
     } catch (error) {
       console.error(error);
     }
   };
-
   return (
     <section>
       <div className="text-center m-7">
@@ -143,7 +154,7 @@ export default function NewProduct() {
             {detailedOptions.map((item, idx) => (
               <div
                 key={idx}
-                className="self-center w-wrap px-4 bg-stone-100 rounded-full my-1"
+                className="self-center px-4 bg-stone-100 rounded-full my-1"
               >
                 <input
                   type="checkbox"
@@ -168,11 +179,23 @@ export default function NewProduct() {
           <Button
             gradientDuoTone="redToYellow"
             type="submit"
+            disabled={loading}
             className="w-1/2 md:w-1/4 mx-auto my-4 rounded-full"
           >
-            {" "}
-            Submit
+            {loading ? (
+              <>
+                <Spinner size="sm" />
+                <span className="pl-2">Loading...</span>
+              </>
+            ) : (
+              "Submit"
+            )}
           </Button>
+          {showMessage && (
+            <Alert className="w-1/2 mx-auto bg-bgPink text-choco text-lg font-extrabold items-center p-4 mb-4">
+              ✅The Product is uploaded successfully
+            </Alert>
+          )}
         </form>
       </div>
     </section>
