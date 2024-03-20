@@ -7,7 +7,7 @@ export default function FooterCom() {
   return (
     <Footer
       container
-      className=" border border-t-8 border-lightBrown max-h-28 "
+      className="mt-4 border border-t-8 border-lightBrown max-h-28 "
     >
       <div className="flex justify-center w-full max-w-6xl ">
         <div className="">

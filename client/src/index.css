@@ -5,6 +5,15 @@
 *{
   font-family: 'Montserrat';
 }
+.slick-dots li button:before{
+  color:#6D3F3F;
+ font-size: 10px;
+
+}
+.slick-dots li.slick-active button:before{
+  color:#6D3F3F;
+  font-size: 10px;
+}
 @layer utilities {
 .highlight {
   background: linear-gradient(to top, rgb(253, 253, 203) 45%, transparent 40%);

@@ -1,13 +1,19 @@
 import React from "react";
 import Slider from "react-slick";
-
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 export default function Carousel() {
+  const moru = [
+    "https://res.cloudinary.com/dg3nqwte9/image/upload/v1710906185/brown_cy6die.jpg",
+    "https://res.cloudinary.com/dg3nqwte9/image/upload/v1710903189/lots_nk9ipk.jpg",
+    "https://res.cloudinary.com/dg3nqwte9/image/upload/v1710903239/lots2_yknfgg.jpg",
+    "https://res.cloudinary.com/dg3nqwte9/image/upload/v1710903283/packaging_hvwphu.jpg",
+    "https://res.cloudinary.com/dg3nqwte9/image/upload/v1710903277/four_bovkpc.jpg",
+  ];
   const settings = {
-    arrows: true,
     dots: true,
+    arrows: true,
     infinite: true,
     speed: 500,
     slidesToShow: 3,
@@ -17,25 +23,14 @@ export default function Carousel() {
     pauseOnHover: true,
   };
   return (
-    <Slider {...settings}>
-      <div>
-        <h3>1</h3>
-      </div>
-      <div>
-        <h3>2</h3>
-      </div>
-      <div>
-        <h3>3</h3>
-      </div>
-      <div>
-        <h3>4</h3>
-      </div>
-      <div>
-        <h3>5</h3>
-      </div>
-      <div>
-        <h3>6</h3>
-      </div>
-    </Slider>
+    <div>
+      <Slider {...settings}>
+        {moru.map((item) => (
+          <div>
+            <img src={item} />
+          </div>
+        ))}
+      </Slider>
+    </div>
   );
 }
