@@ -1,10 +1,11 @@
 import express from 'express'
-import { uploadProducts } from '../controllers/products.controllers';
+import { uploadProducts, getAllProducts } from '../controllers/products.controllers';
 import { auth } from '../middleware/auth';
 
 
 const router = express.Router();
 
 router.post('/upload', auth, uploadProducts)
+router.get('/all', auth, getAllProducts)
 
 export default router;

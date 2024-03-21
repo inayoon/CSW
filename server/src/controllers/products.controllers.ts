@@ -10,3 +10,13 @@ export const uploadProducts =async (req:Request, res:Response,next:NextFunction)
     next(error)
   }
 }
+
+
+export const getAllProducts =async (req:Request, res:Response,next:NextFunction)=>{
+  try {
+    const products = await Product.find();
+    return res.status(200).json({ products });
+  } catch (error) {
+    next(error)
+  }
+}

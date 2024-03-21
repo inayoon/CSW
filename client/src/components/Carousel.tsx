@@ -24,7 +24,7 @@ export default function Carousel() {
   };
   return (
     <div>
-      <Slider {...settings}>
+      <Slider className="ml-0" {...settings}>
         {moru.map((item) => (
           <div>
             <img src={item} />

@@ -6,6 +6,10 @@ const FileUpload = ({ onImageChange, images }) => {
   const handleDrop = async (files) => {
     const file = files[0]; // 현재는 하나의 파일만 업로드하도록 설정
     try {
+      if (images.includes(file.name)) {
+        console.log("이미 업로드된 이미지입니다.");
+        return;
+      }
       // Cloudinary에 이미지 업로드
       const imageUrl = await uploadImage(file);
       // 새 이미지 URL을 이미지 배열에 추가하여 상태 업데이트

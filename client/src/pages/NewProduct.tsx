@@ -2,10 +2,10 @@ import { Alert, Button, Spinner } from "flowbite-react";
 import React, { useState } from "react";
 import axios from "axios";
 import { uploadImage } from "../cloudinary/uploader";
-import { useSelector } from "react-redux";
 import { IRootState } from "../redux/store";
 import FileUpload from "../components/FileUpload";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 type Product = {
   title: string;
@@ -50,6 +50,8 @@ export default function NewProduct() {
     const { value } = e.target;
     setProduct((prevState) => ({
       ...prevState,
+      // 선택한 value가 이미 포함되어 있으면 체크박스가 풀렸다는 의미이므로
+      // 그 value를 제외한 나머지 array를 반환 , 아니면 그 값을 어레이에 추가
       options: prevState.options.includes(value)
         ? prevState.options.filter((option) => option !== value)
         : [...prevState.options, value],
