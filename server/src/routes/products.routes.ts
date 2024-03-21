@@ -6,6 +6,6 @@ import { auth } from '../middleware/auth';
 const router = express.Router();
 
 router.post('/upload', auth, uploadProducts)
-router.get('/all', auth, getAllProducts)
+router.get('/all', getAllProducts)
 
 export default router;

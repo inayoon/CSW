@@ -23,9 +23,10 @@ app.listen(3000, ()=>{
   console.log('Server is running on port 3000!!')
 })
 
+app.use('/api/products',productsRoutes)
 app.use('/api/user',userRoutes)
 app.use('/api/auth',authRoutes)
-app.use('/api/products',productsRoutes)
+
 
 app.use((err: any, req:Request, res:Response, next:NextFunction)=>{
   const statusCode = err.statusCode || 500;

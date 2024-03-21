@@ -8,7 +8,6 @@ export default function Home() {
   const fetchProduct = async () => {
     try {
       const response = await axios.get("/api/products/all");
-      const data = response.data;
       if (response.status === 200) {
         setProduct(response.data.products);
       }
@@ -23,9 +22,19 @@ export default function Home() {
   return (
     <div>
       <Carousel />
-      <CardItems product={product} />
-      <h3>Home page cards {product[0].title}</h3>
-      <h3>Home page cards</h3>
+      <div className="">
+        <h2 className="p-3 md:text-lg text-lightBrown font-semibold text-center">
+          The Big Spring Sale
+          <br />
+          ------------------------------
+        </h2>
+
+        <div className="grid grid-cols-2 md:grid-cols-3 md:mx-1 gap-4 mx-4">
+          {product.map((item) => (
+            <CardItems product={item} key={item._id} />
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
