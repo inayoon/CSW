@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import ImageSlider from "./ImageSlider";
 import { Button } from "flowbite-react";
 import { FaHeartCirclePlus } from "react-icons/fa6";
 import { FaCartPlus } from "react-icons/fa";

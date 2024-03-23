@@ -3,7 +3,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-export default function ImageSlider({ images }) {
+export default function ImageSlider({ images }: { images: string }) {
   const settings = {
     arrows: true,
     infinite: true,
