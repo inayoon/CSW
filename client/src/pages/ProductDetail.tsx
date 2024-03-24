@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import ImageGallery from "react-image-gallery";
 import { Link, useLocation } from "react-router-dom";
-import { PriceZone } from "../components/CardItems";
+import { Button, Dropdown } from "flowbite-react";
+import { FaHeartCirclePlus } from "react-icons/fa6";
+import { FaCartPlus } from "react-icons/fa";
 
 interface Product {
   _id: string;
@@ -85,9 +87,82 @@ export default function ProductDetail() {
               </Link>
               💌
             </p>
-            <p className="px-3 pb-3">
+            <p className="px-3 pb-3 ">
               CSW produces a good quality bear for you🤎
             </p>
+          </div>
+          {/* dropdown menu for extra */}
+          <div className="mt-2 p-2 border border-lightBrown rounded-md mr-2 lg:mr-[10rem] text-sm md:text-md">
+            <Dropdown label="Ribbons & Pendants" inline>
+              {options.map((item: string[]) => (
+                <Dropdown.Item>{item}</Dropdown.Item>
+              ))}
+            </Dropdown>
+          </div>
+          <div className="mt-2 p-2 border border-lightBrown rounded-md mr-2 lg:mr-[10rem] text-sm md:text-md">
+            <Dropdown label="Packaging" inline>
+              <Dropdown.Item>Kraft Paper bag package</Dropdown.Item>
+              <Dropdown.Item>Gift box package +$1</Dropdown.Item>
+            </Dropdown>
+          </div>
+
+          {/* Picking up area */}
+          <div className="my-2 text-gray-500 text-xs md:text-sm">
+            Did you check the{" "}
+            <Link
+              to="/about"
+              className="text-choco underline font-extrabold bg-lightPink"
+            >
+              availability
+            </Link>
+            ?
+          </div>
+          {/* pickingup area buttons */}
+          <div className="mt-2 p-2 border border-lightBrown rounded-md mr-2 lg:mr-[10rem] text-sm md:text-md">
+            <div>Pick-up</div>
+            <div className="flex gap-2">
+              <Button
+                outline
+                gradientDuoTone="redToYellow"
+                className="w-1/2 h-1/4"
+              >
+                1 Yorkville
+              </Button>
+              <Button
+                outline
+                gradientDuoTone="redToYellow"
+                className="w-1/2 h-1/4"
+              >
+                Finch
+              </Button>
+            </div>
+          </div>
+          {/* Buy now button */}
+          <div className="mt-2 mr-2 lg:mr-[10rem]">
+            <Button gradientDuoTone="redToYellow" className="w-full">
+              Buy Now
+            </Button>
+          </div>
+
+          <div className="flex gap-1 mt-2 mr-2 lg:mr-[10rem]">
+            {/* Likes button */}
+            <Button
+              type="button"
+              gradientDuoTone="pinkToOrange"
+              className="w-1/2"
+            >
+              <FaHeartCirclePlus className="text-ivory w-5 h-5 lg:w-6 lg:h-6" />
+              <span className="pl-2">Add to Likes</span>
+            </Button>
+            {/* Cart button */}
+            <Button
+              type="button"
+              gradientDuoTone="pinkToOrange"
+              className="w-1/2"
+            >
+              <FaCartPlus className="text-ivory w-5 h-5 lg:w-6 lg:h-6" />{" "}
+              <span className="pl-2">Add to Cart</span>
+            </Button>
           </div>
         </div>
       </div>
