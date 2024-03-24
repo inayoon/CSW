@@ -55,16 +55,22 @@ export default function CardItems({
         </div>
 
         {/* price and sale% zone */}
-        <div className="flex gap-1 ">
-          <p className="text-sm font-extrabold md:text-lg">${price}</p>
-          <p className="text-sm  line-through md:text-lg text-gray-400">
-            ${`${price + price * 0.5}`}
-          </p>
-          <p className="text-sm font-extrabold text-lightBrown md:text-lg">
-            {Math.round((1 - `${price}` / `${price * 1.5}`) * 100)}%
-          </p>
-        </div>
+        <PriceZone product={product} />
       </div>
     </ul>
+  );
+}
+
+export function PriceZone({ product, product: { price } }) {
+  return (
+    <div className="flex gap-1 ">
+      <p className="text-sm font-extrabold text-red-600 md:text-lg">
+        {Math.round((1 - `${price}` / `${price * 1.5}`) * 100)}%
+      </p>
+      <p className="text-sm font-extrabold md:text-lg ml-2">${price}</p>
+      <p className="text-sm  line-through md:text-lg text-gray-400">
+        ${`${price + price * 0.5}`}
+      </p>
+    </div>
   );
 }

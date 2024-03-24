@@ -55,14 +55,14 @@ export default function Header({
         <div className="flex self-center gap-10 px-4 ">
           {/* navigators */}
           <div className="gap-4 self-center text-sm md:text-lg hidden md:flex ">
-            <Link to="/product/rabbit" className="hover:text-ivory">
-              Rabbit
+            <Link to="/about" className="hover:text-ivory">
+              About
             </Link>
-            <Link to="/product/bear" className="hover:text-ivory">
-              Bear
+            <Link to="/product/all" className="hover:text-ivory">
+              Product
             </Link>
             <Link to="/product/diy-kit" className="hover:text-ivory">
-              Kit
+              DIY-Kit
             </Link>
             {isAdmin ? (
               <Link to="/product/new">

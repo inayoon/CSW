@@ -6,8 +6,7 @@ import SignIn from "./pages/Signin";
 import Header from "./components/Header";
 import FooterCom from "./components/Footer";
 import DiyKit from "./pages/DiyKit";
-import Rabbit from "./pages/Rabbit";
-import Bear from "./pages/Bear";
+import About from "./pages/About";
 import Cart from "./pages/Cart";
 import { useSelector } from "react-redux";
 import { IRootState } from "./redux/store";
@@ -16,6 +15,7 @@ import Favorite from "./pages/Favorite";
 import NewProduct from "./pages/NewProduct";
 import { ProtectedAdmin, ProtectedRoutes } from "./components/ProtectedRoutes";
 import ProductDetail from "./pages/ProductDetail";
+import AllProducts from "./pages/AllProducts";
 
 function App() {
   const isAuth = useSelector<IRootState, boolean>(
@@ -42,8 +42,8 @@ function App() {
           }
         >
           <Route path="/" element={<Home />}></Route>
-          <Route path="/product/rabbit" element={<Rabbit />}></Route>
-          <Route path="/product/bear" element={<Bear />}></Route>
+          <Route path="/about" element={<About />}></Route>
+          <Route path="/product/all" element={<AllProducts />}></Route>
           <Route
             path="/product/:category/:id"
             element={<ProductDetail />}
