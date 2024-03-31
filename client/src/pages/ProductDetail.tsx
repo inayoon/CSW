@@ -5,6 +5,8 @@ import { Button, Dropdown } from "flowbite-react";
 import { FaHeartCirclePlus } from "react-icons/fa6";
 import { FaCartPlus } from "react-icons/fa";
 
+const packaging = ["Kraft Paper bag package", "Gift box package +$1"];
+
 interface Product {
   _id: string;
   images: string[];
@@ -17,6 +19,9 @@ interface Product {
 }
 
 export default function ProductDetail() {
+  const [optionPicked, setOptionPicked] = useState([]);
+  const [wrapping, setWrapping] = useState("");
+  const [pickUp, setPickUp] = useState("");
   const [gallery, setGallery] = useState<
     { original: string; thumbnail: string }[]
   >([]);
@@ -26,6 +31,7 @@ export default function ProductDetail() {
       product: { _id, images, title, stock, sold, category, price, options },
     },
   } = useLocation();
+
   useEffect(() => {
     if (images?.length > 0) {
       const bears: string[] = [];
@@ -38,16 +44,40 @@ export default function ProductDetail() {
       setGallery(bears);
     }
   }, [images]);
+
+  const handleOptions = (item) => {
+    setOptionPicked([...optionPicked, item]);
+  };
+  const handlePackaging = (item) => {
+    setWrapping(item);
+  };
+  const handlePickUp = (item) => {
+    setPickUp(item);
+  };
+
+  const handleOptionDelete = (i: number) => {
+    setOptionPicked((prev) => {
+      const updatedOption = [...prev];
+      updatedOption.splice(i, 1);
+      return updatedOption;
+    });
+  };
+  const handlePackagingDelete = () => {
+    setWrapping("");
+  };
+  const handlePickUpDelete = () => {
+    setPickUp("");
+  };
   return (
     <section>
-      <div className="flex">
+      <div className="flex-col md:flex md:flex-row">
         {/* product image slide */}
-        <div className="w-1/2 my-6 p-4">
+        <div className="w-3/5 mx-auto pt-4 md:w-[40%] md:my-6 md:p-3">
           <ImageGallery items={gallery} showPlayButton={false} />
         </div>
 
         {/* half of product info */}
-        <div className="w-1/2 my-6 py-3 md:p-4">
+        <div className="p-3 md:w-1/2 md:my-6 py-3 md:p-4">
           {/* title area */}
 
           <h1 className=" text-lightBrown font-bold tracking-tight md:text-2xl">
@@ -55,7 +85,7 @@ export default function ProductDetail() {
           </h1>
 
           {/* price area */}
-          <div className="flex justify-between mt-1 pr-2 lg:pr-[10rem]">
+          <div className="flex justify-between mt-1 pr-2 md:pr-[10rem]">
             <div>
               <p className="text-sm font-extrabold text-red-600 md:text-2xl">
                 {Math.round((1 - `${price}` / `${price * 1.5}`) * 100)}%
@@ -75,7 +105,7 @@ export default function ProductDetail() {
           </div>
 
           {/* notice */}
-          <div className="text-center text-sm md:text-md border border-lightBrown rounded-md mr-2 mt-1 lg:mr-[10rem]">
+          <div className="text-center text-sm md:text-md border border-lightBrown rounded-md mr-2 mt-1 lg:mr-[5rem]">
             <div className="p-3">✅Before you buy</div>
             <p className="px-3">
               Please read this{" "}
@@ -91,60 +121,71 @@ export default function ProductDetail() {
               CSW produces a good quality bear for you🤎
             </p>
           </div>
-          {/* dropdown menu for extra */}
-          <div className="mt-2 p-2 border border-lightBrown rounded-md mr-2 lg:mr-[10rem] text-sm md:text-md">
-            <Dropdown label="Ribbons & Pendants" inline>
-              {options.map((item: string[]) => (
-                <Dropdown.Item>{item}</Dropdown.Item>
-              ))}
-            </Dropdown>
-          </div>
-          <div className="mt-2 p-2 border border-lightBrown rounded-md mr-2 lg:mr-[10rem] text-sm md:text-md">
-            <Dropdown label="Packaging" inline>
-              <Dropdown.Item>Kraft Paper bag package</Dropdown.Item>
-              <Dropdown.Item>Gift box package +$1</Dropdown.Item>
-            </Dropdown>
-          </div>
 
-          {/* Picking up area */}
-          <div className="my-2 text-gray-500 text-xs md:text-sm">
-            Did you check the{" "}
-            <Link
-              to="/about"
-              className="text-choco underline font-extrabold bg-lightPink"
-            >
-              availability
-            </Link>
-            ?
-          </div>
-          {/* pickingup area buttons */}
-          <div className="mt-2 p-2 border border-lightBrown rounded-md mr-2 lg:mr-[10rem] text-sm md:text-md">
-            <div>Pick-up</div>
-            <div className="flex gap-2">
-              <Button
-                outline
-                gradientDuoTone="redToYellow"
-                className="w-1/2 h-1/4"
+          {/* start-point of form */}
+          {/* dropdown menu for extra */}
+          <form>
+            <div className="mt-2 p-2 border border-lightBrown rounded-md mr-2 lg:mr-[5rem] text-sm md:text-md">
+              <Dropdown label="Ribbons & Pendants" inline>
+                {options.map((item: string[]) => (
+                  <Dropdown.Item onClick={() => handleOptions(item)}>
+                    {item}
+                  </Dropdown.Item>
+                ))}
+              </Dropdown>
+            </div>
+            <div className="mt-2 p-2 border border-lightBrown rounded-md mr-2 lg:mr-[5rem] text-sm md:text-md">
+              <Dropdown label="Packaging" inline>
+                {packaging.map((p) => (
+                  <Dropdown.Item onClick={() => handlePackaging(p)}>
+                    {p}
+                  </Dropdown.Item>
+                ))}
+              </Dropdown>
+            </div>
+
+            {/* Picking up area */}
+            <div className="my-2 text-gray-500 text-xs md:text-sm">
+              Did you check the{" "}
+              <Link
+                to="/about"
+                className="text-choco underline font-extrabold bg-lightPink"
               >
-                1 Yorkville
-              </Button>
-              <Button
-                outline
-                gradientDuoTone="redToYellow"
-                className="w-1/2 h-1/4"
-              >
-                Finch
+                availability
+              </Link>
+              ?
+            </div>
+            {/* pickingup area buttons */}
+            <div className="mt-2 p-2 border border-lightBrown rounded-md mr-2 lg:mr-[5rem] text-sm md:text-md">
+              <div>Pick-up</div>
+              <div className="flex gap-2">
+                <Button
+                  outline
+                  gradientDuoTone="redToYellow"
+                  className="w-1/2 h-1/4"
+                  onClick={() => handlePickUp("1 Yorkville")}
+                >
+                  1 Yorkville
+                </Button>
+                <Button
+                  outline
+                  gradientDuoTone="redToYellow"
+                  className="w-1/2 h-1/4"
+                  onClick={() => handlePickUp("Finch")}
+                >
+                  Finch
+                </Button>
+              </div>
+            </div>
+            {/* Buy now button */}
+            <div className="mt-2 mr-2 lg:mr-[5rem]">
+              <Button gradientDuoTone="redToYellow" className="w-full">
+                Buy Now
               </Button>
             </div>
-          </div>
-          {/* Buy now button */}
-          <div className="mt-2 mr-2 lg:mr-[10rem]">
-            <Button gradientDuoTone="redToYellow" className="w-full">
-              Buy Now
-            </Button>
-          </div>
+          </form>
 
-          <div className="flex gap-1 mt-2 mr-2 lg:mr-[10rem]">
+          <div className="flex gap-1 mt-2 mr-2 lg:mr-[5rem]">
             {/* Likes button */}
             <Button
               type="button"
@@ -164,6 +205,77 @@ export default function ProductDetail() {
               <span className="pl-2">Add to Cart</span>
             </Button>
           </div>
+
+          {/* display options */}
+          {optionPicked.length > 0 && (
+            <>
+              <h1 className="mt-3 text-lightBrown tracking-tight md:text-xl">
+                Options
+              </h1>
+              <div className="md:mr-[5rem] my-[1%] border-[0.2px] border-lightBrown/30"></div>
+            </>
+          )}
+          {optionPicked &&
+            optionPicked.map((item, index) => (
+              <div className="flex justify-between">
+                <div className="p-2 mb-1 bg-ivory/50 rounded-md shadow-md text-choco text-sm">
+                  {item}
+                </div>
+                <button
+                  key={index}
+                  className="self-center pr-2 md:mr-[5rem]"
+                  onClick={() => handleOptionDelete(index)}
+                >
+                  X
+                </button>
+              </div>
+            ))}
+
+          {/* packaging area */}
+          {wrapping.length > 0 && (
+            <h1 className="mt-3 text-lightBrown tracking-tight md:text-xl">
+              Packaging
+            </h1>
+          )}
+          {wrapping && (
+            <>
+              <div className="md:mr-[5rem] my-[1%] border-[0.2px] border-lightBrown/30"></div>
+              <div className="flex justify-between">
+                <div className="p-2 bg-ivory/50 rounded-md shadow-md text-choco text-sm">
+                  {wrapping}
+                </div>
+                <button
+                  className="self-center pr-2 md:mr-[5rem]"
+                  onClick={handlePackagingDelete}
+                >
+                  X
+                </button>
+              </div>
+            </>
+          )}
+
+          {/* packingup area */}
+          {pickUp.length > 0 && (
+            <h1 className="mt-3 text-lightBrown tracking-tight md:text-xl">
+              Pick-up
+            </h1>
+          )}
+          {pickUp && (
+            <>
+              <div className="md:mr-[5rem] my-[1%] border-[0.2px] border-lightBrown/30"></div>
+              <div className="flex justify-between">
+                <div className="w-1/2 p-2 bg-ivory/50 rounded-md shadow-md text-choco text-sm text-center">
+                  {pickUp}
+                </div>
+                <button
+                  className="self-center pr-2 md:mr-[5rem]"
+                  onClick={handlePickUpDelete}
+                >
+                  X
+                </button>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </section>
