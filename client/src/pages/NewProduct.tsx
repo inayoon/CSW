@@ -24,8 +24,9 @@ export default function NewProduct() {
     "Black Satin Ribbons(2pcs) +$1",
     "Pink Satin Ribbons(2pcs) +$1",
     "Transparent Ribbons(2pcs) +$1",
-    "Pearl beads Ribbons(2pcs)(random color) +$0.5",
-    "Key charm for the necklace(1pc) +$1",
+    "Pearl beads Ribbons(2pcs)(random color) +$1",
+    "Key charm necklace(1pc) +$1",
+    "Pearl and heart charm necklace(1pc) +$1",
   ];
   const user = useSelector<IRootState, any>((state) => state.user?.currentUser);
   const [product, setProduct] = useState<Product>({
@@ -169,14 +170,6 @@ export default function NewProduct() {
                 <label htmlFor={item}>{item}</label>
               </div>
             ))}
-            {/* <input
-              className="flex self-center w-1/2 md:w-1/4 px-4 py-2 bg-stone-100 rounded-full"
-              name="options"
-              type="checkbox"
-              value={product.options}
-              placeholder="User comma for delimiter"
-              onChange={handleChange}
-            ></input> */}
           </div>
           <Button
             gradientDuoTone="redToYellow"

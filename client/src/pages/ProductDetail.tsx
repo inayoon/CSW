@@ -5,8 +5,6 @@ import { Button, Dropdown } from "flowbite-react";
 import { FaHeartCirclePlus } from "react-icons/fa6";
 import { FaCartPlus } from "react-icons/fa";
 
-const packaging = ["Kraft Paper bag package", "Gift box package +$1"];
-
 interface Product {
   _id: string;
   images: string[];
@@ -20,8 +18,8 @@ interface Product {
 
 export default function ProductDetail() {
   const [optionPicked, setOptionPicked] = useState([]);
-  const [wrapping, setWrapping] = useState("");
   const [pickUp, setPickUp] = useState("");
+  const [numOfItems, setNumOfItems] = useState(1);
   const [gallery, setGallery] = useState<
     { original: string; thumbnail: string }[]
   >([]);
@@ -48,26 +46,29 @@ export default function ProductDetail() {
   const handleOptions = (item) => {
     setOptionPicked([...optionPicked, item]);
   };
-  const handlePackaging = (item) => {
-    setWrapping(item);
-  };
   const handlePickUp = (item) => {
     setPickUp(item);
   };
 
   const handleOptionDelete = (i: number) => {
-    setOptionPicked((prev) => {
-      const updatedOption = [...prev];
-      updatedOption.splice(i, 1);
-      return updatedOption;
-    });
+    const updatedOptions = [...optionPicked];
+    updatedOptions.splice(i, 1);
+    setOptionPicked(updatedOptions);
   };
-  const handlePackagingDelete = () => {
-    setWrapping("");
-  };
+
   const handlePickUpDelete = () => {
     setPickUp("");
   };
+
+  const increaseNum = () => {
+    setNumOfItems((prev) => prev + 1);
+  };
+  const decreaseNum = () => {
+    if (numOfItems > 1) {
+      setNumOfItems((prev) => prev - 1);
+    }
+  };
+
   return (
     <section>
       <div className="flex-col md:flex md:flex-row">
@@ -126,24 +127,17 @@ export default function ProductDetail() {
           {/* dropdown menu for extra */}
           <form>
             <div className="mt-2 p-2 border border-lightBrown rounded-md mr-2 lg:mr-[5rem] text-sm md:text-md">
-              <Dropdown label="Ribbons & Pendants" inline>
-                {options.map((item: string[]) => (
-                  <Dropdown.Item onClick={() => handleOptions(item)}>
+              <Dropdown label="Ribbons & Necklaces" inline>
+                {options.map((item: string[], index) => (
+                  <Dropdown.Item
+                    key={index}
+                    onClick={() => handleOptions(item)}
+                  >
                     {item}
                   </Dropdown.Item>
                 ))}
               </Dropdown>
             </div>
-            <div className="mt-2 p-2 border border-lightBrown rounded-md mr-2 lg:mr-[5rem] text-sm md:text-md">
-              <Dropdown label="Packaging" inline>
-                {packaging.map((p) => (
-                  <Dropdown.Item onClick={() => handlePackaging(p)}>
-                    {p}
-                  </Dropdown.Item>
-                ))}
-              </Dropdown>
-            </div>
-
             {/* Picking up area */}
             <div className="my-2 text-gray-500 text-xs md:text-sm">
               Did you check the{" "}
@@ -177,6 +171,90 @@ export default function ProductDetail() {
                 </Button>
               </div>
             </div>
+            {/* display options */}
+            {optionPicked.length > 0 && (
+              <>
+                <h1 className="mt-3 text-lightBrown tracking-tight font-semibold">
+                  Options
+                </h1>
+                <div className="mr-2 mt-1 lg:mr-[5rem] my-[1%] border-[0.2px] border-lightBrown/30"></div>
+              </>
+            )}
+            {optionPicked &&
+              optionPicked.map((item, index) => (
+                <div key={index} className="flex justify-between">
+                  <div className="p-2 mb-1 bg-ivory/50 rounded-md shadow-md text-choco text-sm">
+                    {item}
+                  </div>
+                  <button
+                    key={index}
+                    className="self-center pr-2 lg:mr-[5rem]"
+                    onClick={() => handleOptionDelete(index)}
+                  >
+                    X
+                  </button>
+                </div>
+              ))}
+            {/* packingup area */}
+            {pickUp.length > 0 && (
+              <h1 className="mt-3 text-lightBrown tracking-tight font-semibold">
+                Pick-up
+              </h1>
+            )}
+            {pickUp && (
+              <>
+                <div className="mr-2 mt-1 lg:mr-[5rem] my-[1%] border-[0.2px] border-lightBrown/30"></div>
+                <div className="flex justify-between">
+                  <div className="w-1/2 p-2 bg-ivory/50 rounded-md shadow-md text-choco text-sm text-center">
+                    {pickUp}
+                  </div>
+                  <button
+                    className="self-center pr-2 lg:mr-[5rem]"
+                    onClick={handlePickUpDelete}
+                  >
+                    X
+                  </button>
+                </div>
+              </>
+            )}
+
+            {/* Total price area */}
+            {(optionPicked.length > 0 || pickUp) && (
+              <>
+                <h1 className="mt-3 text-lightBrown tracking-tight font-semibold">
+                  Total Price
+                </h1>
+                <div className="mr-2 mt-1 lg:mr-[5rem] my-[1%] border-[0.2px] border-lightBrown/30"></div>
+                {/* div wrapping the amount and price areas */}
+                <div className="flex justify-between lg:mr-[5rem] ">
+                  <div>
+                    <button onClick={decreaseNum}>
+                      <div className="py-2 px-5 w-6 bg-ivory rounded-l-lg font-bold text-xl">
+                        -
+                      </div>
+                    </button>
+                    <button
+                      onClick={increaseNum}
+                      className="py-2 px-5 font-bold"
+                    >
+                      {numOfItems}
+                    </button>
+                    <button>
+                      <div className="py-2 px-5 w-6 bg-ivory rounded-r-lg font-bold text-xl">
+                        +
+                      </div>
+                    </button>
+                  </div>
+                  {optionPicked.length === 0 && pickUp && <div>${price}</div>}
+                  {optionPicked.length > 0 && (
+                    <div className="mr-2 font-semibold text-red-500">
+                      ${price * numOfItems + optionPicked.length}
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
+
             {/* Buy now button */}
             <div className="mt-2 mr-2 lg:mr-[5rem]">
               <Button gradientDuoTone="redToYellow" className="w-full">
@@ -205,77 +283,6 @@ export default function ProductDetail() {
               <span className="pl-2">Add to Cart</span>
             </Button>
           </div>
-
-          {/* display options */}
-          {optionPicked.length > 0 && (
-            <>
-              <h1 className="mt-3 text-lightBrown tracking-tight md:text-xl">
-                Options
-              </h1>
-              <div className="md:mr-[5rem] my-[1%] border-[0.2px] border-lightBrown/30"></div>
-            </>
-          )}
-          {optionPicked &&
-            optionPicked.map((item, index) => (
-              <div className="flex justify-between">
-                <div className="p-2 mb-1 bg-ivory/50 rounded-md shadow-md text-choco text-sm">
-                  {item}
-                </div>
-                <button
-                  key={index}
-                  className="self-center pr-2 md:mr-[5rem]"
-                  onClick={() => handleOptionDelete(index)}
-                >
-                  X
-                </button>
-              </div>
-            ))}
-
-          {/* packaging area */}
-          {wrapping.length > 0 && (
-            <h1 className="mt-3 text-lightBrown tracking-tight md:text-xl">
-              Packaging
-            </h1>
-          )}
-          {wrapping && (
-            <>
-              <div className="md:mr-[5rem] my-[1%] border-[0.2px] border-lightBrown/30"></div>
-              <div className="flex justify-between">
-                <div className="p-2 bg-ivory/50 rounded-md shadow-md text-choco text-sm">
-                  {wrapping}
-                </div>
-                <button
-                  className="self-center pr-2 md:mr-[5rem]"
-                  onClick={handlePackagingDelete}
-                >
-                  X
-                </button>
-              </div>
-            </>
-          )}
-
-          {/* packingup area */}
-          {pickUp.length > 0 && (
-            <h1 className="mt-3 text-lightBrown tracking-tight md:text-xl">
-              Pick-up
-            </h1>
-          )}
-          {pickUp && (
-            <>
-              <div className="md:mr-[5rem] my-[1%] border-[0.2px] border-lightBrown/30"></div>
-              <div className="flex justify-between">
-                <div className="w-1/2 p-2 bg-ivory/50 rounded-md shadow-md text-choco text-sm text-center">
-                  {pickUp}
-                </div>
-                <button
-                  className="self-center pr-2 md:mr-[5rem]"
-                  onClick={handlePickUpDelete}
-                >
-                  X
-                </button>
-              </div>
-            </>
-          )}
         </div>
       </div>
     </section>
