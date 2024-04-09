@@ -17,6 +17,8 @@ interface Product {
 }
 
 export default function ProductDetail() {
+  const [productInfo, setProductInfo] = useState();
+  const location = useLocation();
   const [optionPicked, setOptionPicked] = useState([]);
   const [pickUp, setPickUp] = useState("");
   const [numOfItems, setNumOfItems] = useState(1);
@@ -24,11 +26,15 @@ export default function ProductDetail() {
     { original: string; thumbnail: string }[]
   >([]);
 
-  const {
-    state: {
-      product: { _id, images, title, stock, sold, category, price, options },
-    },
-  } = useLocation();
+  useEffect(() => {
+    // 페이지가 처음 렌더링될 때만 실행
+    setProductInfo(location.state);
+  }, []);
+  const data = location.state.product;
+
+  const { title, images, stock, sold, category, price, options } = data;
+
+  console.log(title);
 
   useEffect(() => {
     if (images?.length > 0) {
@@ -86,13 +92,13 @@ export default function ProductDetail() {
           </h1>
 
           {/* price area */}
-          <div className="flex justify-between mt-1 pr-2 md:pr-[10rem]">
+          <div className="flex justify-between mt-1 lg:mr-[5rem]">
             <div>
               <p className="text-sm font-extrabold text-red-600 md:text-2xl">
                 {Math.round((1 - `${price}` / `${price * 1.5}`) * 100)}%
               </p>
             </div>
-            <div className="flex gap-1 pr-3">
+            <div className="flex gap-1">
               <p className="text-sm line-through  self-center md:text-xl text-gray-400">
                 ${`${price * 1.5}`}
               </p>
