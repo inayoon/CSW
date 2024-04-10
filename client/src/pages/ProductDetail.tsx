@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import ImageGallery from "react-image-gallery";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { Button, Dropdown } from "flowbite-react";
 import { FaHeartCirclePlus } from "react-icons/fa6";
 import { FaCartPlus } from "react-icons/fa";
+import axios from "axios";
 
 interface Product {
   _id: string;
@@ -14,40 +15,43 @@ interface Product {
   category: string;
   price: number;
   options: string[];
+  createdAt: string;
+  updatedAt: string;
+  writer: string;
+  __v: number;
 }
-
 export default function ProductDetail() {
-  const [productInfo, setProductInfo] = useState();
-  const location = useLocation();
-  const [optionPicked, setOptionPicked] = useState([]);
-  const [pickUp, setPickUp] = useState("");
-  const [numOfItems, setNumOfItems] = useState(1);
+  const [productInfo, setProductInfo] = useState<Product | null>({});
+  const { id } = useParams<{ id: string }>();
+  const [optionPicked, setOptionPicked] = useState<string[]>([]);
+  const [pickUp, setPickUp] = useState<string>("");
+  const [numOfItems, setNumOfItems] = useState<number>(1);
   const [gallery, setGallery] = useState<
     { original: string; thumbnail: string }[]
   >([]);
 
   useEffect(() => {
-    // 페이지가 처음 렌더링될 때만 실행
-    setProductInfo(location.state);
-  }, []);
-  const data = location.state.product;
-
-  const { title, images, stock, sold, category, price, options } = data;
-
-  console.log(title);
+    const fetchProduct = async () => {
+      try {
+        const response = await axios.get(`/api/products/${id}`);
+        const productData = response.data;
+        setProductInfo(productData);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchProduct();
+  }, [id]);
 
   useEffect(() => {
-    if (images?.length > 0) {
-      const bears: string[] = [];
-      images.map((imageName: string) => {
-        return bears.push({
-          original: imageName,
-          thumbnail: imageName,
-        });
-      });
-      setGallery(bears);
+    if (productInfo?.images?.length > 0) {
+      const galleryImages = productInfo?.images.map((imageName: string) => ({
+        original: imageName,
+        thumbnail: imageName,
+      }));
+      setGallery(galleryImages);
     }
-  }, [images]);
+  }, [productInfo]);
 
   const handleOptions = (item) => {
     setOptionPicked([...optionPicked, item]);
@@ -74,6 +78,9 @@ export default function ProductDetail() {
       setNumOfItems((prev) => prev - 1);
     }
   };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  };
 
   return (
     <section>
@@ -88,27 +95,33 @@ export default function ProductDetail() {
           {/* title area */}
 
           <h1 className=" text-lightBrown font-bold tracking-tight md:text-2xl">
-            {title}
+            {productInfo.title}
           </h1>
 
           {/* price area */}
           <div className="flex justify-between mt-1 lg:mr-[5rem]">
             <div>
               <p className="text-sm font-extrabold text-red-600 md:text-2xl">
-                {Math.round((1 - `${price}` / `${price * 1.5}`) * 100)}%
+                {Math.round(
+                  (1 - `${productInfo.price}` / `${productInfo.price * 1.5}`) *
+                    100
+                )}
+                %
               </p>
             </div>
             <div className="flex gap-1">
               <p className="text-sm line-through  self-center md:text-xl text-gray-400">
-                ${`${price * 1.5}`}
+                ${`${productInfo.price * 1.5}`}
               </p>
-              <p className="text-sm font-extrabold md:text-2xl">${price}</p>
+              <p className="text-sm font-extrabold md:text-2xl">
+                ${productInfo.price}
+              </p>
             </div>
           </div>
 
           {/* stock */}
           <div className="text-sm text-gray-400">
-            stock: {stock} {title} left
+            stock: {productInfo.stock} {productInfo.title} left
           </div>
 
           {/* notice */}
@@ -131,10 +144,10 @@ export default function ProductDetail() {
 
           {/* start-point of form */}
           {/* dropdown menu for extra */}
-          <form>
+          <form onSubmit={handleSubmit}>
             <div className="mt-2 p-2 border border-lightBrown rounded-md mr-2 lg:mr-[5rem] text-sm md:text-md">
               <Dropdown label="Ribbons & Necklaces" inline>
-                {options.map((item: string[], index) => (
+                {productInfo?.options?.map((item, index) => (
                   <Dropdown.Item
                     key={index}
                     onClick={() => handleOptions(item)}
@@ -193,7 +206,7 @@ export default function ProductDetail() {
                     {item}
                   </div>
                   <button
-                    key={index}
+                    type="button"
                     className="self-center pr-2 lg:mr-[5rem]"
                     onClick={() => handleOptionDelete(index)}
                   >
@@ -239,22 +252,23 @@ export default function ProductDetail() {
                         -
                       </div>
                     </button>
-                    <button
-                      onClick={increaseNum}
-                      className="py-2 px-5 font-bold"
-                    >
+                    <button className="py-2 px-5 font-bold">
                       {numOfItems}
                     </button>
-                    <button>
+                    <button onClick={increaseNum}>
                       <div className="py-2 px-5 w-6 bg-ivory rounded-r-lg font-bold text-xl">
                         +
                       </div>
                     </button>
                   </div>
-                  {optionPicked.length === 0 && pickUp && <div>${price}</div>}
+                  {optionPicked.length === 0 && pickUp && (
+                    <div className="mr-2 font-semibold text-red-500">
+                      ${productInfo.price * numOfItems}
+                    </div>
+                  )}
                   {optionPicked.length > 0 && (
                     <div className="mr-2 font-semibold text-red-500">
-                      ${price * numOfItems + optionPicked.length}
+                      ${(productInfo.price + optionPicked.length) * numOfItems}
                     </div>
                   )}
                 </div>
